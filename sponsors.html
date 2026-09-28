@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Partners | Bearcats Electric Racing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #e00122;
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --gray: #6e6e73;
+      --card-bg: #111111;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Overpass', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; 
+      height: 80px; 
+      background: rgba(10,10,10,0.80);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 250px; width: auto; object-fit: contain; pointer-events: none; }
+    
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
+    
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-logo img { height: 100px; } 
+    }
+
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(10,10,10,0.97); flex-direction: column;
+      align-items: center; justify-content: center; gap: 36px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { font-size: 28px; font-weight: 700; color: var(--white); text-decoration: none; transition: color 0.2s; }
+    .mobile-nav a:hover { color: var(--red); }
+    .mobile-nav-close { position: absolute; top: 20px; right: 24px; font-size: 32px; background: none; border: none; color: var(--white); cursor: pointer; }
+
+    /* PAGE HEADER / HERO */
+    .page-header {
+      padding: 160px 20px 40px;
+      display: flex; flex-direction: column; align-items: center;
+      background: radial-gradient(circle at center, #1a0205 0%, var(--black) 70%);
+    }
+    .page-header-content { max-width: 700px; width: 100%; text-align: center; }
+    .page-title {
+      font-family: 'Overpass', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900; text-transform: uppercase; font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .page-subtitle { font-size: 1.1rem; color: rgba(255,255,255,0.7); line-height: 1.6; text-align: justify; }
+
+    /* SPONSORS MAIN SECTION */
+    .sponsors-main { padding: 40px 40px 100px; max-width: 1200px; margin: 0 auto; }
+    .section-heading { font-size: 1.8rem; font-weight: 800; margin-bottom: 30px; text-align: center; font-style: italic; text-transform: uppercase; }
+    .sponsors-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px; margin-bottom: 60px;
+    }
+    .sponsor-card {
+      background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px; padding: 40px; height: 160px;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .sponsor-card:hover { transform: translateY(-6px); border-color: rgba(224, 1, 34, 0.5); }
+    .sponsor-card img { max-width: 100%; max-height: 80px; object-fit: contain; filter: grayscale(20%); transition: filter 0.25s ease; }
+    .sponsor-card:hover img { filter: grayscale(0%); }
+
+    /* PARTNERSHIP CALL TO ACTION */
+    .partner-cta {
+      background: linear-gradient(135deg, rgba(224,1,34,0.1), var(--card-bg));
+      border: 1px solid rgba(224, 1, 34, 0.3); border-radius: 20px;
+      padding: 50px; text-align: center; margin-top: 40px;
+    }
+    .partner-cta h3 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; font-style: italic; text-transform: uppercase; }
+    .partner-cta p { font-size: 1.05rem; color: rgba(255, 255, 255, 0.8); max-width: 700px; margin: 0 auto 30px; line-height: 1.7; text-align: justify; }
+    .btn { padding: 14px 32px; border-radius: 999px; font-size: 1rem; font-weight: 600; text-decoration: none; transition: all 0.2s ease; display: inline-block; }
+    .btn-red { background: var(--red); color: var(--white); border: 1px solid var(--red); }
+    .btn-red:hover { background: #c0011d; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { background: #050505; color: rgba(255, 255, 255, 0.6); padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    .footer-content { max-width: 900px; margin: 0 auto; font-size: 0.85rem; line-height: 1.6; text-align: justify; }
+    .footer-copyright { margin-top: 20px; font-size: 0.8rem; color: rgba(255, 255, 255, 0.4); letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+
+  <!-- Desktop Navbar -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="image_c15922_2.png" alt="Bearcats Electric Racing Logo">
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="progress.html">Progress</a></li>
+      <li><a href="sponsors.html" class="active">Sponsors</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Fullscreen Menu -->
+  <div class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-close" id="mobile-close-btn">&times;</button>
+    <a href="index.html" class="mobile-link">Home</a>
+    <a href="team.html" class="mobile-link">Team</a>
+    <a href="progress.html" class="mobile-link">Progress</a>
+    <a href="sponsors.html" class="mobile-link">Sponsors</a>
+  </div>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">Our Partners</h1>
+      <p class="page-subtitle">We are proud to collaborate with industry leaders who provide cutting-edge technology, financial backing, and mentorship to fuel our engineering success.</p>
+    </div>
+  </header>
+
+  <!-- Sponsors Main Content -->
+  <main class="sponsors-main">
+    <h2 class="section-heading">Featured Partners</h2>
+    <div class="sponsors-grid">
+      <div class="sponsor-card">
+        <img src="Altium.png" alt="Altium Logo">
+      </div>
+      <div class="sponsor-card">
+        <img src="VIGRADE.png" alt="VI-GRADE Logo">
+      </div>
+      <div class="sponsor-card">
+        <img src="tesla-logo-black-and-white-removebg-preview.png" alt="Tesla Logo">
+      </div>
+      <div class="sponsor-card">
+        <img src="neweagle.png" alt="New Eagle Logo">
+      </div>
+    </div>
+
+    <!-- Partnership Call to Action -->
+    <div class="partner-cta">
+      <h3>Partner With Bearcats Electric Racing</h3>
+      <p>Support the next generation of high-performance electric vehicle engineers. Your partnership enables us to manufacture advanced components, test rigorously, and compete nationally at Formula SAE.</p>
+      <a href="mailto:bearcatsev@ucmail.uc.edu" class="btn btn-red">Become a Sponsor</a>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>Organizations affiliated under the Bearcats Racing Umbrella are registered at the University of Cincinnati. Registration shall not be construed as the University of Cincinnati’s approval, disapproval, endorsement, or sponsorship of the student organization’s publications, activities, statements, purposes, actions, or positions.</p>
+      <div class="footer-copyright">
+        &copy; 2026 Bearcats Electric Racing. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileCloseBtn = document.getElementById('mobile-close-btn');
+
+    hamburgerBtn.addEventListener('click', () => mobileNav.classList.add('open'));
+    mobileCloseBtn.addEventListener('click', () => mobileNav.classList.remove('open'));
+  </script>
+
+</body>
+</html>
