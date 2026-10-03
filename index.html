@@ -4,381 +4,174 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bearcats Electric Racing | University of Cincinnati</title>
-  <link href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Agency+FB:wght@700&family=Industry:wght@500;700;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --red: #e00122;
-      --black: #0a0a0a;
+      --dark-red: #b8011c;
+      --black: #000000;
       --white: #ffffff;
-      --gray: #6e6e73;
-      --card-bg: #111111;
+      --gray: #a7a5aa;
+      --card-bg: rgba(10, 10, 10, 0.9);
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Overpass', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
+    body { font-family: 'Industry', sans-serif; font-weight: 500; text-transform: uppercase; background: var(--black); color: var(--white); overflow-x: hidden; position: relative; }
+
+    /* ULTRA-SMOOTH GPU-ACCELERATED BACKGROUND SLIDESHOW */
+    .page-bg-slideshow {
+      position: fixed; inset: 0; z-index: -3; overflow: hidden; pointer-events: none;
+    }
+    .bg-slide {
+      position: absolute; inset: 0; background-size: cover; background-position: center;
+      opacity: 0; 
+      transition: opacity 3s cubic-bezier(0.4, 0, 0.2, 1), transform 3s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: brightness(0.28) contrast(1.15); transform: scale(1.05);
+      will-change: opacity, transform;
+    }
+    .bg-slide.active { opacity: 1; transform: scale(1); }
+    .page-bg-overlay {
+      position: fixed; inset: 0; z-index: -2; pointer-events: none;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.92) 100%);
+    }
 
     /* NAVBAR */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px; 
-      height: 80px; 
-      background: rgba(10,10,10,0.80);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 40px; height: 80px; 
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(167,165,170,0.15);
     }
-    
-    .nav-logo { 
-      display: flex; 
-      align-items: center; 
-      text-decoration: none; 
-    }
-    .nav-logo img { 
-      height: 250px; 
-      width: auto; 
-      object-fit: contain; 
-      pointer-events: none; 
-    }
-    
-    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
-    .nav-links a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.2s; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo img { height: 180px; width: auto; object-fit: contain; pointer-events: none; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; font-weight: 700; }
+    .nav-links a { font-size: 14px; color: var(--gray); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 4px; }
     .nav-links a:hover, .nav-links a.active { color: var(--white); }
-    
+    .nav-links a.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--red); }
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
     .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
-    
-    /* MOBILE NAV VISIBILITY */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      .nav-logo img { height: 100px; } 
-      .hero-title { font-size: 2.2rem !important; transform: none !important; } 
+      .nav-logo img { height: 90px; } 
     }
-
-    .mobile-nav {
-      display: none; position: fixed; inset: 0; z-index: 999;
-      background: rgba(10,10,10,0.97); flex-direction: column;
-      align-items: center; justify-content: center; gap: 36px;
-    }
+    .mobile-nav { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.98); flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a { font-size: 28px; font-weight: 700; color: var(--white); text-decoration: none; transition: color 0.2s; }
-    .mobile-nav a:hover { color: var(--red); }
+    .mobile-nav a { font-size: 28px; font-weight: 900; color: var(--white); text-decoration: none; }
     .mobile-nav-close { position: absolute; top: 20px; right: 24px; font-size: 32px; background: none; border: none; color: var(--white); cursor: pointer; }
 
-    /* SCROLL ANIMATIONS */
-    .fade-up { opacity: 0; transform: translateY(36px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
     .fade-up.visible { opacity: 1; transform: translateY(0); }
 
-    /* HERO SECTION */
+    /* HERO */
     #home {
-      position: relative; 
-      height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; overflow: hidden;
-      padding: 0 20px;
+      position: relative; height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 0 40px; width: 100%;
     }
-    
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: url('CAR.png'); 
-      background-size: cover;
-      background-position: center;
-      z-index: -2;
-    }
+    .hero-content { z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .hero-kicker { font-weight: 900; font-size: clamp(1.1rem, 2vw, 1.6rem); letter-spacing: 3px; color: var(--white); margin-bottom: 0.75rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+    .hero-title { font-family: 'Agency FB', sans-serif; font-size: clamp(4.5rem, 10vw, 9.5rem); color: var(--white); font-weight: 700; line-height: 0.95; margin-bottom: 0; text-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+    .hero-subtitle { font-size: clamp(2rem, 4vw, 3.5rem); color: var(--red); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; text-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+    .hero-btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 0.5rem; }
 
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: #000000;
-      opacity: 0.3; 
-      z-index: -1;
-      animation: darkenBackground 1s ease-in-out forwards;
-      animation-delay: 0.2s; 
-    }
-
-    @keyframes darkenBackground {
-      0% { opacity: 0.3; }
-      100% { opacity: 0.75; } 
-    }
-
-    .hero-content {
-      z-index: 1;
-      width: 100%;
-      max-width: 1400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .hero-kicker {
-      font-family: 'Overpass', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 3px;
-      color: rgba(255, 255, 255, 0.9);
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    /* "Built by Bearcats" as the large, red title on top */
-    .hero-title { 
-      font-family: 'Overpass', sans-serif; 
-      font-size: clamp(3.5rem, 8vw, 7.5rem); 
-      color: var(--red); 
-      font-weight: 900; 
-      font-style: italic; 
-      text-transform: uppercase;
-      letter-spacing: -2px;
-      transform: skewX(-8deg); 
-      line-height: 1.05;
-      margin-bottom: 0;
-    }
-
-    /* "Driven by the future" as the white subtitle underneath */
-    .hero-subtitle { 
-      font-family: 'Overpass', sans-serif; 
-      font-size: clamp(1.8rem, 3.5vw, 3rem); 
-      color: var(--white); 
-      font-weight: 800; 
-      font-style: italic; 
-      line-height: 1.1;
-      text-transform: uppercase;
-      letter-spacing: -1px;
-      transform: skewX(-8deg); 
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-btn-group {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 0.5rem;
-    }
-
-    /* UNIFORM SECTION STYLES */
+    /* FULL-WIDTH SECTIONS */
     .content-section {
-      padding: 100px 40px;
-      background: var(--black);
+      position: relative; padding: 120px 60px; width: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(8,8,8,0.85) 15%, rgba(8,8,8,0.85) 85%, rgba(0,0,0,0) 100%);
+      border-top: 1px solid rgba(167,165,170,0.1);
+      border-bottom: 1px solid rgba(167,165,170,0.1);
     }
-    .content-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 60px;
-      flex-wrap: wrap;
-    }
-    .content-grid.reverse {
-      flex-direction: row-reverse;
-    }
-    .content-text-side {
-      flex: 1;
-      min-width: 300px;
-    }
-    .content-image-side {
-      flex: 1;
-      min-width: 300px;
-    }
-    .content-image-side img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      filter: brightness(0.65);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
+    .content-grid { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 2; }
+    .content-text-side { width: 100%; max-width: 1400px; background: var(--card-bg); padding: 60px; border-radius: 20px; border: 1px solid rgba(167,165,170,0.15); backdrop-filter: blur(16px); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
     
-    .section-title { 
-      font-family: 'Overpass', sans-serif;
-      font-size: 2.5rem; 
-      font-weight: 800; 
-      margin-bottom: 1.5rem; 
-    }
-    .section-text { 
-      font-size: 1.1rem; 
-      line-height: 1.8; 
-      color: rgba(255,255,255,0.8); 
-      margin-bottom: 0; 
-      text-align: justify; 
-    }
+    .section-title { font-family: 'Agency FB', sans-serif; font-size: clamp(3.5rem, 7vw, 5.5rem); font-weight: 700; margin-bottom: 1.5rem; color: var(--white); letter-spacing: 1px; }
+    .section-text { font-weight: 500; font-size: 1.15rem; line-height: 1.9; color: var(--gray); text-align: left; }
+    .text-content-wrapper { display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+    
+    .about-stat-block { display: flex; align-items: baseline; gap: 16px; margin-top: 0.5rem; }
+    .stat-number { font-family: 'Agency FB', sans-serif; font-size: 5.5rem; font-weight: 700; color: var(--red); line-height: 1; }
+    .stat-label { font-weight: 900; font-size: 1.4rem; color: var(--white); letter-spacing: 1px; }
 
-    .text-content-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem; 
-    }
+    .about-tags-container { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 1rem; }
+    .about-tag { font-weight: 700; font-size: 0.95rem; color: var(--gray); letter-spacing: 1px; }
+    .tag-separator { width: 6px; height: 6px; background-color: var(--red); border-radius: 50%; }
 
-    .about-pills-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 2rem;
-    }
-    .about-pill {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 10px 20px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    /* SPONSORS SECTION */
+    /* SPONSORS */
     #sponsors-showcase {
-      padding: 100px 40px;
-      background: #0e0e0e;
-      text-align: center;
+      position: relative; padding: 120px 60px; width: 100%; text-align: center;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(8,8,8,0.85) 15%, rgba(8,8,8,0.85) 85%, rgba(0,0,0,0) 100%);
+      border-top: 1px solid rgba(167,165,170,0.1);
+      border-bottom: 1px solid rgba(167,165,170,0.1);
     }
-    .sponsors-container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .sponsors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-      align-items: center;
-    }
-    .sponsor-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 30px;
-      height: 140px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .sponsor-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(224, 1, 34, 0.4);
-    }
-    .sponsor-card img {
-      max-width: 100%;
-      max-height: 70px;
-      object-fit: contain;
-      filter: grayscale(20%);
-      transition: filter 0.2s ease;
-    }
-    .sponsor-card:hover img {
-      filter: grayscale(0%);
-    }
+    .sponsors-container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; z-index: 2; background: var(--card-bg); padding: 60px; border-radius: 20px; border: 1px solid rgba(167,165,170,0.15); backdrop-filter: blur(16px); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+    .sponsors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-top: 40px; align-items: center; width: 100%; }
+    .sponsor-card { background: rgba(0,0,0,0.75); border: 1px solid rgba(167,165,170,0.15); border-radius: 16px; padding: 35px; height: 150px; display: flex; align-items: center; justify-content: center; transition: transform 0.25s ease, border-color 0.25s ease; }
+    .sponsor-card:hover { transform: translateY(-4px); border-color: var(--red); }
+    .sponsor-card img { max-width: 100%; max-height: 75px; object-fit: contain; filter: grayscale(20%); transition: filter 0.25s ease; }
+    .sponsor-card:hover img { filter: grayscale(0%); }
 
-    /* FOOTER STYLES */
-    footer {
-      background: #050505;
-      color: rgba(255, 255, 255, 0.6);
-      padding: 40px 20px;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .footer-content {
-      max-width: 900px;
-      margin: 0 auto;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      text-align: justify;
-    }
-    .footer-copyright {
-      margin-top: 20px;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 0.5px;
-    }
+    /* FOOTER */
+    footer { background: #030303; color: var(--gray); padding: 50px 40px; text-align: center; border-top: 1px solid rgba(167,165,170,0.15); position: relative; z-index: 2; width: 100%; }
+    .footer-content { width: 100%; max-width: 1400px; margin: 0 auto; font-size: 0.85rem; line-height: 1.6; text-align: left; color: var(--gray); font-weight: 500; }
+    .footer-copyright { margin-top: 20px; font-size: 0.8rem; color: var(--gray); letter-spacing: 0.5px; font-weight: 700; text-align: center; }
 
     /* BUTTONS */
-    .btn {
-      padding: 14px 32px;
-      border-radius: 999px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s ease;
-    }
-    .btn-primary {
-      background: var(--red);
-      color: var(--white);
-    }
-    .btn-primary:hover {
-      background: #c0011d;
-      transform: translateY(-2px);
-    }
-    .btn-white {
-      background: var(--white);
-      color: var(--black);
-      border: 1px solid var(--white);
-    }
-    .btn-white:hover {
-      background: rgba(255, 255, 255, 0.85);
-      transform: translateY(-2px);
-    }
-    .btn-secondary {
-      background: rgba(255,255,255,0.1);
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.2);
-      transform: translateY(-2px);
-    }
+    .btn { padding: 14px 32px; border-radius: 999px; font-size: 1rem; font-weight: 900; text-decoration: none; transition: all 0.2s ease; display: inline-block; }
+    .btn-primary { background: var(--red); color: var(--white); }
+    .btn-primary:hover { background: var(--dark-red); transform: translateY(-2px); }
+    .btn-white { background: var(--white); color: var(--red); border: 1px solid var(--white); }
+    .btn-white:hover { background: var(--gray); border-color: var(--gray); color: var(--white); transform: translateY(-2px); }
 
-    @media (max-width: 900px) {
-      .content-grid, .content-grid.reverse {
-        flex-direction: column;
-      }
+    @media (max-width: 768px) {
+      .content-section, #sponsors-showcase { padding: 80px 20px; }
+      .content-text-side, .sponsors-container { padding: 30px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Desktop Navbar -->
+  <!-- Full-Page Blended Rotating Background Slideshow with GPU Acceleration -->
+  <div class="page-bg-slideshow">
+    <div class="bg-slide active" style="background-image: url('CAR.png');"></div>
+    <div class="bg-slide" style="background-image: url('25-06-19 BCMS BEV 2025 Comp F-30.jpg');"></div>
+    <div class="bg-slide" style="background-image: url('25-06-19 BCMS BEV 2025 Comp F-80.jpg');"></div>
+    <div class="bg-slide" style="background-image: url('25-06-19 BCMS BEV 2025 Comp F-57.jpg');"></div>
+    <div class="bg-slide" style="background-image: url('24-06-19 BCMS BEV 2024 Comp F-1.jpg');"></div>
+  </div>
+  <div class="page-bg-overlay"></div>
+
   <nav>
-    <a href="index.html" class="nav-logo">
-      <img src="image_c15922_2.png" alt="Bearcats Electric Racing Logo">
-    </a>
+    <a href="index.html" class="nav-logo"><img src="image_c15922_2.png" alt="Logo"></a>
     <ul class="nav-links">
       <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="team.html">Team</a></li>
+      <li><a href="team.html">Team & Archive</a></li>
       <li><a href="progress.html">Progress</a></li>
       <li><a href="sponsors.html">Sponsors</a></li>
     </ul>
-    <button class="hamburger" id="hamburger-btn">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+    <button class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></button>
   </nav>
 
-  <!-- Mobile Fullscreen Menu -->
   <div class="mobile-nav" id="mobile-nav">
     <button class="mobile-nav-close" id="mobile-close-btn">&times;</button>
-    <a href="index.html" class="mobile-link">Home</a>
-    <a href="team.html" class="mobile-link">Team</a>
-    <a href="progress.html" class="mobile-link">Progress</a>
-    <a href="sponsors.html" class="mobile-link">Sponsors</a>
+    <a href="index.html">Home</a>
+    <a href="team.html">Team & Archive</a>
+    <a href="progress.html">Progress</a>
+    <a href="sponsors.html">Sponsors</a>
   </div>
 
-  <!-- Hero Landing Section -->
   <section id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
     <div class="hero-content fade-up">
       <div class="hero-kicker">University of Cincinnati &bull; Formula SAE Electric</div>
-      <!-- "Built by Bearcats" as the large red title on top -->
       <h1 class="hero-title">Built by Bearcats</h1>
-      <!-- "Driven by the future" as the white subtitle underneath -->
       <p class="hero-subtitle">Driven by the future</p>
       <div class="hero-btn-group">
-        <a href="team.html" class="btn btn-primary">Join Our Team</a>
-        <a href="sponsors.html" class="btn btn-white">Become a Sponsor</a>
+        <a href="team.html" class="btn btn-white">Join Our Team</a>
+        <a href="mailto:bearcatsev@ucmail.uc.edu" class="btn btn-primary">Become a Sponsor</a>
       </div>
     </div>
   </section>
 
-  <!-- About Us Section -->
   <section id="about" class="content-section">
     <div class="content-grid fade-up">
       <div class="content-text-side">
@@ -387,97 +180,75 @@
           <p class="section-text">
             Bearcats Electric Racing is the University of Cincinnati's Formula SAE Electric team. Founded in 2020, we design, build, and race a fully electric open-wheel race car — giving students real-world engineering experience across electrical, mechanical, and business disciplines.
           </p>
-          <div class="about-pills-container">
-            <div class="about-pill">Founded 2020</div>
-            <div class="about-pill">Formula SAE Electric</div>
-            <div class="about-pill">University of Cincinnati</div>
-            <div class="about-pill">All Majors Welcome</div>
+          <div class="about-stat-block">
+            <span class="stat-number">#16</span>
+            <span class="stat-label">in 2025</span>
+          </div>
+          <div class="about-tags-container">
+            <span class="about-tag">Founded 2020</span>
+            <span class="tag-separator"></span>
+            <span class="about-tag">Formula SAE Electric</span>
+            <span class="tag-separator"></span>
+            <span class="about-tag">University of Cincinnati</span>
+            <span class="tag-separator"></span>
+            <span class="about-tag">All Majors Welcome</span>
           </div>
         </div>
       </div>
-      <div class="content-image-side">
-        <img src="FormulaSAETeam.png" alt="Bearcats Electric Racing Team">
-      </div>
     </div>
   </section>
 
-  <!-- Sponsors Section -->
   <section id="sponsors-showcase" class="fade-up">
     <div class="sponsors-container">
-      <h2 class="section-title" style="color: var(--white); text-align: center;">Our Trusted Sponsors</h2>
+      <h2 class="section-title" style="text-align: center;">Our Trusted Sponsors</h2>
       <div class="sponsors-grid">
-        <div class="sponsor-card">
-          <img src="Altium.png" alt="Altium Logo">
-        </div>
-        <div class="sponsor-card">
-          <img src="VIGRADE.png" alt="VI-GRADE Logo">
-        </div>
-        <div class="sponsor-card">
-          <img src="tesla-logo-black-and-white-removebg-preview.png" alt="Tesla Logo">
-        </div>
-        <div class="sponsor-card">
-          <img src="neweagle.png" alt="New Eagle Logo">
-        </div>
+        <div class="sponsor-card"><img src="Altium.png" alt="Altium"></div>
+        <div class="sponsor-card"><img src="VIGRADE.png" alt="VI-GRADE"></div>
+        <div class="sponsor-card"><img src="tesla-logo-black-and-white-removebg-preview.png" alt="Tesla"></div>
+        <div class="sponsor-card"><img src="neweagle.png" alt="New Eagle"></div>
       </div>
     </div>
   </section>
 
-  <!-- What is Formula SAE Section -->
-  <section id="fsae" class="content-section" style="background: var(--black);">
-    <div class="content-grid reverse fade-up">
+  <section id="fsae" class="content-section">
+    <div class="content-grid fade-up">
       <div class="content-text-side">
-        <h2 class="section-title" style="color: var(--white);">What is Formula SAE?</h2>
+        <h2 class="section-title">What is Formula SAE?</h2>
         <div class="text-content-wrapper">
           <p class="section-text">
             Formula SAE is a student design competition organized by SAE International. The competition challenges university teams from around the world to conceive, design, fabricate, and compete with small, formula-style electric and combustion racing cars. Teams are evaluated not just on vehicle speed and endurance on the track, but also on engineering design, manufacturing cost, and a comprehensive business presentation.
           </p>
         </div>
       </div>
-      <div class="content-image-side">
-        <img src="FormulaSAE.png" alt="Formula SAE Competition Group">
-      </div>
     </div>
   </section>
 
-  <!-- Footer with Disclaimer and Copyright -->
   <footer>
     <div class="footer-content">
       <p>Organizations affiliated under the Bearcats Racing Umbrella are registered at the University of Cincinnati. Registration shall not be construed as the University of Cincinnati’s approval, disapproval, endorsement, or sponsorship of the student organization’s publications, activities, statements, purposes, actions, or positions.</p>
-      <div class="footer-copyright">
-        &copy; 2026 Bearcats Electric Racing. All rights reserved.
-      </div>
+      <div class="footer-copyright">&copy; 2026 Bearcats Electric Racing. All rights reserved.</div>
     </div>
   </footer>
 
   <script>
-    // --- Mobile Menu Logic ---
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const mobileNav = document.getElementById('mobile-nav');
-    const mobileCloseBtn = document.getElementById('mobile-close-btn');
+    const slides = document.querySelectorAll('.page-bg-slideshow .bg-slide');
+    if (slides.length > 1) {
+      let currentIndex = 0;
+      setInterval(() => {
+        slides[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add('active');
+      }, 10000);
+    }
 
-    hamburgerBtn.addEventListener('click', () => mobileNav.classList.add('open'));
-    mobileCloseBtn.addEventListener('click', () => mobileNav.classList.remove('open'));
-
-    // --- Scroll Animation Logic (Fade Up) ---
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.15
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target); 
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.fade-up').forEach(element => {
-      observer.observe(element);
-    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    const hb = document.getElementById('hamburger-btn');
+    const mn = document.getElementById('mobile-nav');
+    hb.addEventListener('click', () => mn.classList.add('open'));
+    document.getElementById('mobile-close-btn').addEventListener('click', () => mn.classList.remove('open'));
   </script>
-
 </body>
 </html>
